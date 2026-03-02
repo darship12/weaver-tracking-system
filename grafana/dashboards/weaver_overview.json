@@ -1,0 +1,44 @@
+{
+  "title": "Weaver Tracking System Overview",
+  "uid": "weaver-overview",
+  "version": 1,
+  "refresh": "30s",
+  "panels": [
+    {
+      "id": 1,
+      "title": "Total Active Employees",
+      "type": "stat",
+      "targets": [{"rawSql": "SELECT COUNT(*) as count FROM employee_employee WHERE status = 'active'", "refId": "A", "format": "table"}],
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0}
+    },
+    {
+      "id": 2,
+      "title": "Today's Production (Meters)",
+      "type": "stat",
+      "targets": [{"rawSql": "SELECT COALESCE(SUM(meter_woven), 0) as meters FROM production_production WHERE date = CURRENT_DATE", "refId": "A", "format": "table"}],
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 0}
+    },
+    {
+      "id": 3,
+      "title": "Today's Attendance",
+      "type": "stat",
+      "targets": [{"rawSql": "SELECT COUNT(*) as present FROM attendance_attendance WHERE date = CURRENT_DATE AND status = 'present'", "refId": "A", "format": "table"}],
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 0}
+    },
+    {
+      "id": 4,
+      "title": "Daily Production Trend",
+      "type": "timeseries",
+      "targets": [{"rawSql": "SELECT date as time, SUM(meter_woven) as meters FROM production_production WHERE date >= NOW() - INTERVAL '30 days' GROUP BY date ORDER BY date", "refId": "A", "format": "time_series"}],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 4}
+    },
+    {
+      "id": 5,
+      "title": "Top Performers This Month",
+      "type": "table",
+      "targets": [{"rawSql": "SELECT e.name, e.employee_id, SUM(p.meter_woven) as total_meters FROM production_production p JOIN employee_employee e ON p.employee_id = e.id WHERE DATE_TRUNC('month', p.date) = DATE_TRUNC('month', CURRENT_DATE) GROUP BY e.name, e.employee_id ORDER BY total_meters DESC LIMIT 10", "refId": "A", "format": "table"}],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 4}
+    }
+  ],
+  "schemaVersion": 38
+}
