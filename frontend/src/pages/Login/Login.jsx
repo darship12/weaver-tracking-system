@@ -66,7 +66,11 @@ export default function Login() {
           </button>
         </form>
 
-        
+        <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+          <p className="text-xs text-gray-500 font-medium mb-2">Demo Credentials:</p>
+          <p className="text-xs text-gray-600">Username: <strong>admin</strong></p>
+          <p className="text-xs text-gray-600">Password: <strong>admin123</strong></p>
+        </div>
       </div>
     </div>
   )
